@@ -305,6 +305,29 @@ func (d *driver) storageAccountsClient(cfg *Azure, environment autorestazure.Env
 		clientCredentialsConfig.Resource = environment.TokenAudience
 		clientCredentialsConfig.AADEndpoint = environment.ActiveDirectoryEndpoint
 
+		klog.Infof("Checking clientCredentialsConfig for newline characters")
+
+		if strings.Contains(clientCredentialsConfig.ClientID, "\n") {
+			klog.Infof("clientCredentialsConfig.ClientID %#v contains a newline character", clientCredentialsConfig.ClientID)
+		}
+
+		if strings.Contains(clientCredentialsConfig.ClientSecret, "\n") {
+			// Doesn't print the ClientSecret value as plain text
+			klog.Infof("clientCredentialsConfig.ClientSecret contains a newline character")
+		}
+
+		if strings.Contains(clientCredentialsConfig.TenantID, "\n") {
+			klog.Infof("clientCredentialsConfig.TenantID %#v contains a newline character", clientCredentialsConfig.TenantID)
+		}
+
+		if strings.Contains(clientCredentialsConfig.Resource, "\n") {
+			klog.Infof("clientCredentialsConfig.Resource %#v contains a newline character", clientCredentialsConfig.Resource)
+		}
+
+		if strings.Contains(clientCredentialsConfig.AADEndpoint, "\n") {
+			klog.Infof("clientCredentialsConfig.AADEndpoint %#v contains a newline character", clientCredentialsConfig.AADEndpoint)
+		}
+
 		auth, err := clientCredentialsConfig.Authorizer()
 		if err != nil {
 			return storage.AccountsClient{}, err
