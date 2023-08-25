@@ -18,6 +18,8 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+
+	"k8s.io/klog/v2"
 )
 
 const (
@@ -65,22 +67,27 @@ func NewOAuthConfigWithAPIVersion(activeDirectoryEndpoint, tenantID string, apiV
 		}
 		api = fmt.Sprintf("?api-version=%s", *apiVersion)
 	}
+	klog.Infof("DEBUG: activeDirectoryEndpoint: %#v", activeDirectoryEndpoint)
 	u, err := url.Parse(activeDirectoryEndpoint)
 	if err != nil {
 		return nil, err
 	}
+	klog.Infof("DEBUG: tenantID: %#v", tenantID)
 	authorityURL, err := u.Parse(tenantID)
 	if err != nil {
 		return nil, err
 	}
+	klog.Infof("DEBUG: authorizeURL: %#v", fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "authorize", api))
 	authorizeURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "authorize", api))
 	if err != nil {
 		return nil, err
 	}
+	klog.Infof("DEBUG: tokenURL: %#v", fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "token", api))
 	tokenURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "token", api))
 	if err != nil {
 		return nil, err
 	}
+	klog.Infof("DEBUG: devideCodeURL: %#v", fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "devicecode", api))
 	deviceCodeURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "devicecode", api))
 	if err != nil {
 		return nil, err
